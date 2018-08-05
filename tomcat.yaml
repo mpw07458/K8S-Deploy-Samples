@@ -1,0 +1,40 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: tomcat-service
+  labels:
+    app: tomcat
+    role: rolling-update
+spec:
+  type: LoadBalancer
+  selector:
+    app: tomcat
+    role: rolling-update
+  ports:
+    - port: 80
+      targetPort: 8080
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: tomcat-deployment-rolling-update
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: tomcat
+        role: rolling-update
+    spec:
+      containers:
+      - name: tomcat-container
+        image: tomcat:9.0.8
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+  strategy:
+    type: RollingUpdate
+    rollingUp      maxSurge: 50%

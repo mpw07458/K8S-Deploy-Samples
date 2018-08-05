@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: guestbook
+spec:
+  selector:
+    app: guestbook
+    tier: frontend
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 9376

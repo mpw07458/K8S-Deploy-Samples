@@ -1,0 +1,25 @@
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  name: drone-deploy
+  namespace: drone-dev
+rules:
+  - apiGroups: ["extensions"]
+    resources: ["deployments"]
+    verbs: ["get","list","patch","update"]
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: drone-deploy
+  namespace: drone-dev
+subjects:
+  - kind: ServiceAccount
+    name: drone-deploy
+    namespace: drone-dev
+roleRef:
+  kind: Role
+  name: drone-deploy
+  apiGroup: rbac.authorization.k8s.io
